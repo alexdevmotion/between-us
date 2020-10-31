@@ -6,6 +6,7 @@ import torchvision
 from PIL import Image, ImageFile
 
 from monoloco.network import PifPaf
+from monoloco.network.process import preprocess_pifpaf
 
 
 def image_transform(image):
@@ -56,8 +57,9 @@ def predict(img_bytes: bytes, device='cuda', num_workers=1):
         for image, processed_image_cpu, fields in zip(
                 images, processed_images_cpu, fields_batch):
             _, _, pifpaf_out = pifpaf.forward(image, processed_image_cpu, fields)
+            boxes, keypoints = preprocess_pifpaf(pifpaf_out, image.size(), enlarge_boxes=False)
 
-            return pifpaf_out
+            return boxes
 
 
 def main():

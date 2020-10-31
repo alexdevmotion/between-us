@@ -14,8 +14,8 @@ async def root():
 @app.post('/predict')
 async def predict_image(image: UploadFile = File(...)):
     img_bytes = await image.read()
-    pifpaf = predict(img_bytes)
-    return [{'bbox': pp['bbox']} for pp in pifpaf]
+    boxes = predict(img_bytes)
+    return boxes
 
 
 if __name__ == '__main__':
