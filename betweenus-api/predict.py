@@ -1,12 +1,16 @@
 import io
+import math
+import numpy as np
 from argparse import Namespace
 
 import torch
 import torchvision
 from PIL import Image, ImageFile
 
-from monoloco.network import PifPaf
-from monoloco.network.process import preprocess_pifpaf
+from monoloco.network import PifPaf, MonoLoco
+from monoloco.network.process import preprocess_pifpaf, factory_for_gt
+
+from social_distance import are_subjects_too_close
 
 
 def image_transform(image):
@@ -36,12 +40,13 @@ def predict(img_bytes: bytes, device='cuda', num_workers=1):
                      fixed_b=None, force_complete_pose=True, head_dilation=1, head_dropout=0.0, head_kernel_size=1,
                      head_padding=0, glob=None, head_quad=0, headnets=['pif', 'paf'], hidden_size=512,
                      images=[''], instance_threshold=0.15, json_dir=None, keypoint_threshold=None,
-                     model=None, n_dropout=0, networks=['monoloco'],
+                     model='models/monoloco-191018-1459.pkl', n_dropout=0, networks=['monoloco'],
                      output_directory='data/output', output_types=None, paf_th=0.1,
                      path_gt=None, pif_fixed_scale=None, predict=False,
                      pretrained=True, profile_decoder=None, scale=1.0, seed_threshold=0.2, show=False, social=True,
                      transform='None', two_scale=False, webcam=False, z_max=10)
 
+    monoloco = MonoLoco(model=args.model, device=args.device)
     pifpaf = PifPaf(args)
     data = load_image(img_bytes)
     data_loader = torch.utils.data.DataLoader(
@@ -58,8 +63,16 @@ def predict(img_bytes: bytes, device='cuda', num_workers=1):
                 images, processed_images_cpu, fields_batch):
             _, _, pifpaf_out = pifpaf.forward(image, processed_image_cpu, fields)
             boxes, keypoints = preprocess_pifpaf(pifpaf_out, image.size(), enlarge_boxes=False)
+            kk, dic_gt = factory_for_gt(image.size(), name='', path_gt=args.path_gt)
+            dic_out = monoloco.forward(keypoints, kk)
+            dic_out = monoloco.post_process(dic_out, boxes, keypoints, kk, dic_gt, reorder=False)
 
-            return boxes
+            too_close = are_subjects_too_close(dic_out)
+
+            return {
+                'boxes': boxes,
+                'too_close': too_close
+            }
 
 
 def main():
