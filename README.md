@@ -2,10 +2,14 @@
 
 ## Setup
 
+### Requirements
+- Anaconda
+- GPU
+- CUDA 10.0
+
 Install dependencies
 ```
-conda install pytorch==1.1.0 torchvision==0.3.0 cudatoolkit=10.0 -c pytorch
-conda install openpifpaf==0.9.0
+conda env create -f betweenus.yml
 ```
 
 Install specific version of monoloco:
