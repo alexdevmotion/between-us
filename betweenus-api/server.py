@@ -27,8 +27,7 @@ async def root():
 @app.post('/predict')
 async def predict_image(image: UploadFile = File(...)):
     img_bytes = await image.read()
-    boxes = predict(img_bytes)
-    return boxes
+    return predict(img_bytes)
 
 
 if __name__ == '__main__':

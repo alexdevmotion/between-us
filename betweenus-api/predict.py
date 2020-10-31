@@ -1,12 +1,9 @@
 import io
-import math
-import numpy as np
 from argparse import Namespace
 
 import torch
 import torchvision
 from PIL import Image, ImageFile
-
 from monoloco.network import PifPaf, MonoLoco
 from monoloco.network.process import preprocess_pifpaf, factory_for_gt
 
