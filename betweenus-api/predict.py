@@ -22,7 +22,7 @@ def image_transform(image):
 
 def load_image(img_bytes: bytes):
     ImageFile.LOAD_TRUNCATED_IMAGES = True
-    image = Image.open(io.BytesIO(img_bytes))
+    image = Image.open(io.BytesIO(img_bytes)).convert('RGB')
 
     original_image = torchvision.transforms.functional.to_tensor(image)
     image = image_transform(image)
@@ -58,9 +58,10 @@ def predict(img_bytes: bytes, device='cuda', num_workers=1):
 
         for image, processed_image_cpu, fields in zip(
                 images, processed_images_cpu, fields_batch):
+            im_size = (image.size()[1], image.size()[0])
             _, _, pifpaf_out = pifpaf.forward(image, processed_image_cpu, fields)
-            boxes, keypoints = preprocess_pifpaf(pifpaf_out, image.size(), enlarge_boxes=False)
-            kk, dic_gt = factory_for_gt(image.size(), name='', path_gt=args.path_gt)
+            boxes, keypoints = preprocess_pifpaf(pifpaf_out, im_size, enlarge_boxes=False)
+            kk, dic_gt = factory_for_gt(im_size, name='', path_gt=args.path_gt)
             dic_out = monoloco.forward(keypoints, kk)
             dic_out = monoloco.post_process(dic_out, boxes, keypoints, kk, dic_gt, reorder=False)
 
