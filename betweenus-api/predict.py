@@ -23,7 +23,7 @@ def load_image(img_bytes: bytes):
     ImageFile.LOAD_TRUNCATED_IMAGES = True
     image = Image.open(io.BytesIO(img_bytes))
 
-    original_image = torchvision.transforms.functional.to_tensor(image)  # 0-255 --> 0-1
+    original_image = torchvision.transforms.functional.to_tensor(image)
     image = image_transform(image)
 
     return original_image, image
@@ -36,9 +36,9 @@ def predict(img_bytes: bytes, device='cuda', num_workers=1):
                      fixed_b=None, force_complete_pose=True, head_dilation=1, head_dropout=0.0, head_kernel_size=1,
                      head_padding=0, glob=None, head_quad=0, headnets=['pif', 'paf'], hidden_size=512,
                      images=[''], instance_threshold=0.15, json_dir=None, keypoint_threshold=None,
-                     model='data/models/monoloco-191018-1459.pkl', n_dropout=0, networks=['monoloco'],
-                     output_directory='data/output', output_types=['front', 'bird'], paf_th=0.1,
-                     path_gt='data/arrays/names-kitti-190513-1754.json', pif_fixed_scale=None, predict=False,
+                     model=None, n_dropout=0, networks=['monoloco'],
+                     output_directory='data/output', output_types=None, paf_th=0.1,
+                     path_gt=None, pif_fixed_scale=None, predict=False,
                      pretrained=True, profile_decoder=None, scale=1.0, seed_threshold=0.2, show=False, social=True,
                      transform='None', two_scale=False, webcam=False, z_max=10)
 
