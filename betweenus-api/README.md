@@ -4,26 +4,24 @@
 
 ### Requirements
 - Anaconda
-- GPU
-- CUDA 10.0
+- GPU + CUDA 10.0
 
-Install dependencies
+#### Create an env with all required dependencies
 ```
 cd betweenus-api
 conda env create -f betweenus.yml
 ```
 
-Install specific version of monoloco
+#### Install specific version of Monoloco
 ```
 git clone -b social-distance --single-branch https://github.com/vita-epfl/monoloco.git
 cd monoloco
 pip install -e .
 ```
 
-## Running
+## Usage
 
 Start the server
 ```
 python server.py
 ```
-

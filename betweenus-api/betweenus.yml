@@ -87,5 +87,4 @@ dependencies:
     - python-json-logger==2.0.1
     - scipy==1.5.3
     - tabulate==0.8.7
-prefix: C:\anaconda3\envs\betweenus
 
