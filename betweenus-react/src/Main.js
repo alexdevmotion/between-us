@@ -116,6 +116,7 @@ class Main extends React.Component {
 
   startCaptureLoop() {
     if (this.state.mode === 'webcam') {
+      this.setState({imageFileName: null})
       this.onCapture();
     }
   }
@@ -170,7 +171,7 @@ class Main extends React.Component {
           </div>}
       </div>
       <div>
-        {this.state.mode === 'webcam' && <Webcam audio={false} style={{position: 'fixed', top: 0, zIndex: -1, visibility: 'hidden'}}
+        {this.state.mode === 'webcam' && <Webcam id="webcam" audio={false}
                                                  ref={this.webcamRef}
                                                  screenshotFormat={this.imageFormat}/>}
       </div>

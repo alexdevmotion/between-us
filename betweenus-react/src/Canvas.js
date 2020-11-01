@@ -3,6 +3,14 @@ import React from 'react';
 
 class Canvas extends React.Component {
 
+  state = {
+    virusImg: null
+  }
+
+  componentDidMount() {
+    this.setState({virusImg: document.getElementById('virus')});
+  }
+
   componentDidUpdate() {
     const ctx = this.canvas.getContext('2d');
 
@@ -15,27 +23,34 @@ class Canvas extends React.Component {
 
       ctx.drawImage(background, 0, 0);
 
-      this.props.boxes.forEach(box => this.drawBox(box.coord, box.label ? 'red' : 'green'));
+      this.props.boxes.forEach(box => this.drawBox(box.coord, box.label));
     });
   }
 
-  drawBox(coord, color, lineWidth = 5) {
+  drawBox(coord, isBad, lineWidth = 5) {
     const ctx = this.canvas.getContext('2d');
 
     let [x, y, width, height] = coord
 
-    ctx.strokeStyle = color;
+    ctx.strokeStyle = isBad ? '#eb5569' : '#00b89c';
     ctx.lineWidth = lineWidth;
     ctx.beginPath();
     ctx.rect(x, y, width, height)
     ctx.stroke();
+
+    if (isBad) {
+      ctx.drawImage(this.state.virusImg, x, y);
+    }
   }
 
   render() {
-    return <canvas className="is-centered"
-                   ref={(canvas) => {
-                     this.canvas = canvas;
-                   }}/>
+    return <>
+      <canvas className="is-centered"
+              ref={(canvas) => {
+                this.canvas = canvas;
+              }}/>
+      <img id="virus" src="virus.png"/>
+    </>
   }
 
 }

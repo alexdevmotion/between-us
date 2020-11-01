@@ -4,11 +4,11 @@ import Main from './Main';
 function App() {
   return (
     <>
-      <nav className="navbar mb-3" role="navigation" aria-label="main navigation">
-        <div className="navbar-brand">
-          Between us
+      <div className="container my-5">
+        <div className="columns is-centered">
+          <img id="logo" src="logo.svg"/>
         </div>
-      </nav>
+      </div>
       <div className="container is-widescreen mb-5">
         <Main></Main>
       </div>
