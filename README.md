@@ -1,5 +1,3 @@
-# Between Us
-
 ![Between Us](betweenus-react/public/logo.svg)
 
 A social distancing regulation API built on top of [openpifpaf](https://github.com/vita-epfl/openpifpaf) and [Monoloco](https://github.com/vita-epfl/monoloco).
@@ -33,4 +31,4 @@ We also built a demo web app that showcases the power of the API.
 
 ### Usage
 
-See [betweenus-react/README.md](betweenus-api/README.md)
+See [betweenus-react/README.md](betweenus-react/README.md)
