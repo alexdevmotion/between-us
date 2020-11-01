@@ -1,6 +1,6 @@
 # Between Us API demo app
 
-Demo app that queries the API with images (either uploaded or from the webcam), then renders the JSON output in a HTML canvas element as bounding boxes, indicating violations of the social distancing protocol.
+Demo web app that queries the API with images (either uploaded or from the webcam), then renders the JSON output in a HTML canvas element as bounding boxes, indicating violations of the social distancing protocol.
 
 
 ## Features

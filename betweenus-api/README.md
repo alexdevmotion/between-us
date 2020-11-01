@@ -1,6 +1,6 @@
 # Between us API
 
-An API that receives an image as input and responds with a JSON that contains:
+API that receives an image as input and responds with a JSON that contains:
 - bounding boxes of detected human poses
 - for each human pose, a boolean indicating whether or not they are respecting the social distancing norm
 

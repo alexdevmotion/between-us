@@ -1,6 +1,6 @@
 ![Between Us](betweenus-react/public/logo.svg)
 
-A social distancing regulation API, with an accopanying demo app.
+An image social social distance estimation API, with an accompanying demo web app.
 
 ## Problem
 
