@@ -29,6 +29,8 @@ See [betweenus-api/README.md](betweenus-api/README.md)
 
 We also built a demo web app that showcases the power of the API.
 
+![Webcam mode showcase](assets/webcam.gif)
+
 ### Usage
 
 See [betweenus-react/README.md](betweenus-api/README.md)
