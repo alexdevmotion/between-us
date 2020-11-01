@@ -1,6 +1,6 @@
 ![Between Us](betweenus-react/public/logo.svg)
 
-### This project participated at [2020's edition of 2NHack](https://www.facebook.com/events/951558321995062), check out the [slides](assets/betweenus.pdf).
+### This project won first place at [2020's edition of 2NHack](https://www.facebook.com/events/951558321995062), check out the [slides](assets/betweenus.pdf).
 
 An image social distance estimation API, with an accompanying demo web app.
 
