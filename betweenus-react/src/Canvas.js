@@ -15,9 +15,6 @@ class Canvas extends React.Component {
 
       ctx.drawImage(background, 0, 0);
 
-      console.log(background.width, background.height)
-      console.log(this.props.boxes.map(b => b.coord));
-
       this.props.boxes.forEach(box => this.drawBox(box.coord, box.label ? 'red' : 'green'));
     });
   }
@@ -35,7 +32,7 @@ class Canvas extends React.Component {
   }
 
   render() {
-    return <canvas id="canvas"
+    return <canvas className="is-centered"
                    ref={(canvas) => {
                      this.canvas = canvas;
                    }}/>

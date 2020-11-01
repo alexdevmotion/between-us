@@ -25,10 +25,12 @@ const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
 
 class Main extends React.Component {
   imageFormat = 'image/jpeg';
-  captureLoopEnabled = false;
   state = {
+    computing: false,
+    imageFileName: '',
     imageBase64: null,
     boxes: [],
+    mode: null,
   };
 
   constructor(props) {
@@ -65,6 +67,7 @@ class Main extends React.Component {
   onFileChange(event) {
     const imageFile = event.target.files[0];
     if (imageFile) {
+      this.setState({imageFileName: imageFile.name});
       this.toBase64(imageFile).then(imageBase64 => {
         this.computeAndDrawSocialDistance(imageFile, imageBase64);
       });
@@ -75,6 +78,8 @@ class Main extends React.Component {
     const formData = new FormData();
     formData.append('image', imageFile);
 
+    this.setState({computing: true});
+
     fetch(`http://localhost:8000/predict`, {
       method: 'POST',
       body: formData
@@ -82,9 +87,8 @@ class Main extends React.Component {
       .then(res => {
         this.setState({imageBase64});
         this.setBoxes(res);
-        if (this.captureLoopEnabled) {
-          this.onCapture();
-        }
+        this.setState({computing: false});
+        this.startCaptureLoop();
       });
   }
 
@@ -111,25 +115,64 @@ class Main extends React.Component {
   }
 
   startCaptureLoop() {
-    if (this.captureLoopEnabled) {
+    if (this.state.mode === 'webcam') {
       this.onCapture();
     }
+  }
+
+  onModeSelected(mode) {
+    this.setState({mode}, () => {
+      this.startCaptureLoop();
+    });
   }
 
   render() {
     return <>
       <div>
-        {!this.captureLoopEnabled && <input type='file' onChange={this.onFileChange.bind(this)}/>}
+        <div className="buttons has-addons is-centered">
+          <button className={'button ' + (this.state.mode === 'webcam' && 'is-primary is-selected')}
+                  onClick={() => this.onModeSelected('webcam')}>Webcam live feed
+          </button>
+          <button className={'button ' + (this.state.mode === 'upload' && 'is-primary is-selected')}
+                  onClick={() => this.onModeSelected('upload')}>Image upload
+          </button>
+        </div>
+
+        {this.state.mode === 'upload' &&
+        <>
+          <div className={'file is-centered is-primary ' + (this.state.imageFileName && 'has-name')}>
+            <label className="file-label">
+              <input className="file-input" type="file" accept="image/*" onChange={this.onFileChange.bind(this)}/>
+              <span className="file-cta">
+                <span className="file-icon">
+                  <i className="fas fa-upload"></i>
+                </span>
+                <span className="file-label">
+                  Choose a file…
+                </span>
+              </span>
+              {this.state.imageFileName && <span className="file-name">
+                {this.state.imageFileName}
+              </span>
+              }
+            </label>
+          </div>
+          {this.state.computing && <div className="columns is-centered my-4">
+            <progress className="progress is-small is-primary" style={{width: 300}} max="50">15%</progress>
+          </div>}
+        </>}
       </div>
       <div>
         {this.state.imageBase64 &&
-        <Canvas background={this.state.imageBase64}
-                boxes={this.state.boxes}/>}
+          <div className="mt-4 columns is-centered">
+            <Canvas background={this.state.imageBase64}
+                    boxes={this.state.boxes}/>
+          </div>}
       </div>
       <div>
-        {this.captureLoopEnabled && <Webcam audio={false} style={{visibility: 'hidden'}}
-                ref={this.webcamRef}
-                screenshotFormat={this.imageFormat}/>}
+        {this.state.mode === 'webcam' && <Webcam audio={false} style={{position: 'fixed', top: 0, zIndex: -1, visibility: 'hidden'}}
+                                                 ref={this.webcamRef}
+                                                 screenshotFormat={this.imageFormat}/>}
       </div>
     </>
   }
